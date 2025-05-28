@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=mydatabaseuser  # Changed to a more secure username
+      - POSTGRES_PASSWORD=password  # Replace with a VERY strong password.  Use a secrets manager in production.
+      - POSTGRES_DB=mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://mydatabaseuser:password@db:5432/mydatabase # Use environment variables for credentials
+      - SECRET_KEY=your_secret_key #  Replace with a strong randomly generated key.  Use a secrets management system in production.
+      - FLASK_ENV=development #For development, remove in production.
+    depends_on:
+      - db
+
+volumes:
+  db-data:

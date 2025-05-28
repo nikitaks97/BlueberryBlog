@@ -1,0 +1,61 @@
+<!-- /home/devops/code/my-new-flask-project/app/templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blueberry Blog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="site-header">
+            <h1 class="site-title">🫐 Blueberry Blog</h1>
+            <p class="site-subtitle">Fresh thoughts, sweet ideas, daily inspiration</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <div class="nav-buttons">
+            {% if current_user.is_authenticated %}
+                <span>Welcome back, <b>{{ current_user.username }}</b>! 🎉</span>
+                <a href="{{ url_for('main.create_post') }}" class="btn">✍️ Create Post</a>
+                <a href="{{ url_for('main.logout') }}" class="btn">👋 Logout</a>
+            {% else %}
+                <a href="{{ url_for('main.login') }}" class="btn">🔑 Login</a>
+                <a href="{{ url_for('main.register') }}" class="btn">📝 Register</a>
+            {% endif %}
+        </div>
+
+        <h2>Latest Posts</h2>
+        
+        {% if posts %}
+        <div class="posts-grid">
+            {% for post in posts %}
+                <div class="card">
+                    <div class="post-title">
+                        <a href="{{ url_for('main.view_post', post_id=post.id) }}">{{ post.title }}</a>
+                    </div>
+                    <div class="post-meta">
+                        <span>✍️ {{ post.author.username }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <p>No posts yet. Be the first to <a href="{{ url_for('main.create_post') }}">create one</a>!</p>
+        {% endif %}
+
+        <div class="footer">
+            <p>Made with 💙 and blueberries</p>
+        </div>
+    </div>
+</body>
+</html>

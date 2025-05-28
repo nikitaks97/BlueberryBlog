@@ -1,0 +1,30 @@
+<!-- /home/devops/code/my-new-flask-project/app/templates/create_post.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Post | Blueberry Blog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Create a New Blueberry Post</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="flashes">
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <form method="POST">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" rows="5" cols="30" required></textarea>
+        <button type="submit">Create Post</button>
+    </form>
+    <a href="{{ url_for('main.index') }}">Go back to the main page</a>
+</div>
+</body>
+</html>
