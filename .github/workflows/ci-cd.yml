@@ -39,6 +39,11 @@ jobs:
     run: |
         pip install pytest pytest-cov
         pytest tests --cov=app --cov-report=xml:coverage.xml
+  - name: Upload coverage report
+    uses: actions/upload-artifact@v4
+    with:
+      name: coverage-report
+      path: coverage.xml
         
  sonarqube:
   runs-on: ubuntu-latest
@@ -46,6 +51,10 @@ jobs:
   steps:  
   - name: Checkout code
     uses: actions/checkout@v4
+  - name: download coverage report
+    uses: actions/download-artifact@v4
+    with:
+      name: coverage-report
   - name: SonarCloud Scan
     uses: sonarsource/sonarqube-scan-action@v5.2.0
     env:
