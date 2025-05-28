@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blueberryblog-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: blueberryblog-app
+  template:
+    metadata:
+      labels:
+        app: blueberryblog-app
+    spec:
+      containers:
+        - name: blueberryblog-app
+          image: nikitaks997797/blueberryblog:v1.0
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          env:
+            - name: FLASK_ENV
+              value: production
